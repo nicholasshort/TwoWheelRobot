@@ -5,7 +5,7 @@
     Web: http://www.jarzebski.pl
     (c) 2014 by Korneliusz Jarzebski
 */
-#include <Arduino.h>
+
 #include <Wire.h>
 #include <MPU6050.h>
 
