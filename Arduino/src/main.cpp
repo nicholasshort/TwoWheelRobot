@@ -1,10 +1,3 @@
-/*
-    MPU6050 Triple Axis Gyroscope & Accelerometer. Pitch & Roll & Yaw Gyroscope Example.
-    Read more: http://www.jarzebski.pl/arduino/czujniki-i-sensory/3-osiowy-zyroskop-i-akcelerometr-mpu6050.html
-    GIT: https://github.com/jarzebski/Arduino-MPU6050
-    Web: http://www.jarzebski.pl
-    (c) 2014 by Korneliusz Jarzebski
-*/
 #include <Arduino.h>
 #include <Wire.h>
 #include <MPU6050.h>
@@ -36,8 +29,8 @@ float desiredAngle = -90;
 
 // PID Values
 float K = 600;
-float Ki = 0;
-float Kd = 0;
+float Ki = 5;
+float Kd = 100;
 
 // Controller Output
 float output = 0;
@@ -48,7 +41,7 @@ bool start = false;
 void setup() 
 {
   Serial.begin(115200);
-  
+
   Serial.println("Starting...");
 
   // Initialize MPU6050
@@ -89,6 +82,8 @@ void loop()
   // Error calculations
   error = pitch - desiredAngle;
 
+  if(abs(error) > 90) start = false;
+
   if(abs(error) < 0.5) start = true;
 
   if(start){ 
@@ -101,9 +96,11 @@ void loop()
     output = output > 255 ? 255 : output;
 
   }
+
+  output = start ? output : 0;
   
   Serial.print("Output: ");
-  Serial.println(output);
+  Serial.println(pitch);
   //Serial.print("Error: ");
   //Serial.println(error);
 
