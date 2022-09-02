@@ -12,7 +12,7 @@ private:
     float P[2][2];
 
     // Preprocess states
-    float*& predict(float* &state, float theta_dot, float dt);
+    float* predict(float state[], float theta_dot, float dt);
   
 
 public:
@@ -21,7 +21,7 @@ public:
     KalmanFilter(float Qo, float Qb, float R);
 
     // Update state
-    float*& update(float* &state, float theta, float theta_dot, float dt);
+    float* update(float state[], float theta, float theta_dot, float dt);
 
 };
 

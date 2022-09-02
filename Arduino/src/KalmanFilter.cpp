@@ -11,7 +11,7 @@ KalmanFilter::KalmanFilter(float Qo, float Qb, float R){
     this->P[1][1] = 0;
 }
 
-float*& KalmanFilter::predict(float* &state, float theta_dot, float dt){
+float* KalmanFilter::predict(float state[], float theta_dot, float dt){
     
     // Update state using previous state (Xk|k-1)
     state[0] = state[0] + dt*(theta_dot - state[1]);
@@ -25,7 +25,7 @@ float*& KalmanFilter::predict(float* &state, float theta_dot, float dt){
     return state;
 }
 
-float*& KalmanFilter::update(float* &state, float theta, float theta_dot, float dt){
+float* KalmanFilter::update(float state[], float theta, float theta_dot, float dt){
 
     // Get priori state 
     state = predict(state, theta_dot, dt);

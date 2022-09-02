@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <MPU6050.h>
+#include "KalmanFilter.h"
 
 #define PWM_A 6
 #define PWM_B 5
@@ -12,12 +13,14 @@
 
 MPU6050 mpu;
 
+KalmanFilter kalmanFilter(0.001f, 0.003f, 0.03f);
+
 // Timers
 unsigned long timer = 0;
 float timeStep = 0.01;
 
-// Pitch
-float pitch = 0;
+// State
+float* state = (float*)calloc(2, sizeof(float));
 
 // Error variables
 float error = 0;
@@ -28,7 +31,7 @@ float totalError = 0;
 float desiredAngle = -90;
 
 // PID Values
-float K = 600;
+float Kp = 600;
 float Ki = 5;
 float Kd = 100;
 
@@ -76,11 +79,11 @@ void loop()
   // Read normalized values
   Vector norm = mpu.readNormalizeGyro();
 
-  // Calculate Pitch
-  pitch = pitch + norm.YAxis * timeStep;
+  // Calculate Angle
+  state = kalmanFilter.update(state, (state[0] + norm.YAxis * timeStep), norm.YAxis, timeStep);
   
   // Error calculations
-  error = pitch - desiredAngle;
+  error = state[0] - desiredAngle;
 
   if(abs(error) > 90) start = false;
 
@@ -91,7 +94,7 @@ void loop()
     totalError = totalError + error;
 
     // PID Calculations
-    output = K*error + Ki*totalError + Kd*(error - prevError);
+    output = Kp*error + Ki*totalError + Kd*(error - prevError);
     output = map(abs(output), 0, 1250, 0, 255);
     output = output > 255 ? 255 : output;
 
@@ -100,9 +103,7 @@ void loop()
   output = start ? output : 0;
   
   Serial.print("Output: ");
-  Serial.println(pitch);
-  //Serial.print("Error: ");
-  //Serial.println(error);
+  Serial.println(output);
 
   prevError = error;
   
@@ -121,6 +122,7 @@ void loop()
     analogWrite(PWM_A, output);
     analogWrite(PWM_B, output);
   }
+
   // Wait to full timeStep period
   delay((timeStep*1000) - (millis() - timer));
 
