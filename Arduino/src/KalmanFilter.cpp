@@ -1,4 +1,6 @@
+#include <Arduino.h>
 #include "KalmanFilter.h"
+
 
 KalmanFilter::KalmanFilter(float Qo, float Qb, float R){
     this->Q[0][0] = Qo;

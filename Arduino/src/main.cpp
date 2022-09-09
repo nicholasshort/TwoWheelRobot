@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <MPU6050.h>
 #include "KalmanFilter.h"
+#include "MPU6050_Sensor.h"
 
 #define PWM_A 6
 #define PWM_B 5
@@ -11,7 +12,7 @@
 #define IN_4 12
 
 
-MPU6050 mpu;
+MPU6050_Sensor mpu;
 
 KalmanFilter kalmanFilter(0.001f, 0.003f, 0.03f);
 
@@ -28,7 +29,7 @@ float prevError = 0;
 float totalError = 0;
 
 // Angle
-float desiredAngle = -90;
+float desiredAngle = 0;
 
 // PID Values
 float Kp = 600;
@@ -47,20 +48,7 @@ void setup()
 
   Serial.println("Starting...");
 
-  // Initialize MPU6050
-  while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G))
-  {
-    Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
-    delay(500);
-  }
-
-  // Calibrate gyroscope. The calibration must be at rest.
-  Serial.println("Calibrating Gyro...");
-  mpu.calibrateGyro();
-  Serial.println("Calibration Complete!");
-
-  // Set threshold sensivty. Default 3.
-  mpu.setThreshold(3);
+  mpu.begin();
 
   // Initialize pinout
   pinMode(PWM_A, OUTPUT);
@@ -76,18 +64,26 @@ void loop()
 {
   timer = millis();
 
-  // Read normalized values
-  Vector norm = mpu.readNormalizeGyro();
+  // Read accelerometer values
+  float accelX = mpu.getAccelXAxis();
+  float accelY = mpu.getAccelYAxis();
+  float accelZ = mpu.getAccelZAxis();
 
-  // Calculate Angle
-  state = kalmanFilter.update(state, (state[0] + norm.YAxis * timeStep), norm.YAxis, timeStep);
-  
+  // Read gyro value
+  float gyroY = mpu.getGyroYAxis();
+
+  // Calculate Pitch
+  float pitch = atan(accelX / sqrt(accelY * accelY + accelZ * accelZ)) * RAD_TO_DEG;
+
+  // Run measurement through kalman filter
+  state = kalmanFilter.update(state, pitch, gyroY, timeStep);
+
   // Error calculations
-  error = state[0] - desiredAngle;
+  error = (state[0]-state[1]) - desiredAngle;
 
-  if(abs(error) > 90) start = false;
+  if(abs(error) > 45) start = false;
 
-  if(abs(error) < 0.5) start = true;
+  if(abs(error) < 1) start = true;
 
   if(start){ 
 
@@ -101,10 +97,7 @@ void loop()
   }
 
   output = start ? output : 0;
-  
-  Serial.print("Output: ");
-  Serial.println(output);
-
+  Serial.println(state[0]);
   prevError = error;
   
   if(error < 0) {
