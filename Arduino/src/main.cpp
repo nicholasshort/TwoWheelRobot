@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include <MPU6050.h>
 #include "KalmanFilter.h"
 #include "MPU6050_Sensor.h"
 
@@ -39,7 +38,7 @@ float desiredAngle = 0;
 // PID Values
 float Kp = 500;
 float Ki = 15;
-float Kd = 350; //350
+float Kd = 700;
 
 // Controller Output
 float output = 0;
