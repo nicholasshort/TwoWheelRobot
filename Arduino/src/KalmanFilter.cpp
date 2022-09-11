@@ -20,7 +20,7 @@ float* KalmanFilter::predict(float state[], float theta_dot, float dt){
     
     // Update error covariance using previous error covariance (Pk|k-1)
     P[0][0] = P[0][0] + dt*(dt*P[1][1] - P[0][1] - P[1][0] + Q[0][0]);
-    P[0][1] = P[0][1] - dt*P[1][1];
+    P[0][1] = P[0][1] - dt * P[1][1];
     P[1][0] = P[1][0] - dt * P[1][1];
     P[1][1] = P[1][1] + Q[1][1] * dt;
     

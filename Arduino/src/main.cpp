@@ -14,7 +14,12 @@
 
 MPU6050_Sensor mpu;
 
-KalmanFilter kalmanFilter(0.001f, 0.003f, 0.03f);
+// Variances
+float Qo = 0.001;
+float Qb = 0.003;
+float R = 20;
+
+KalmanFilter kalmanFilter(Qo, Qb, R);
 
 // Timers
 unsigned long timer = 0;
@@ -32,9 +37,9 @@ float totalError = 0;
 float desiredAngle = 0;
 
 // PID Values
-float Kp = 600;
-float Ki = 5;
-float Kd = 100;
+float Kp = 500;
+float Ki = 15;
+float Kd = 350; //350
 
 // Controller Output
 float output = 0;
@@ -47,6 +52,8 @@ void setup()
   Serial.begin(115200);
 
   Serial.println("Starting...");
+
+  state[0] = -85;
 
   mpu.begin();
 
@@ -73,13 +80,13 @@ void loop()
   float gyroY = mpu.getGyroYAxis();
 
   // Calculate Pitch
-  float pitch = atan(accelX / sqrt(accelY * accelY + accelZ * accelZ)) * RAD_TO_DEG;
+  float pitch = -atan(accelX / sqrt(accelY * accelY + accelZ * accelZ)) * RAD_TO_DEG;
 
   // Run measurement through kalman filter
   state = kalmanFilter.update(state, pitch, gyroY, timeStep);
 
   // Error calculations
-  error = (state[0]-state[1]) - desiredAngle;
+  error = state[0] - desiredAngle;
 
   if(abs(error) > 45) start = false;
 
@@ -87,8 +94,13 @@ void loop()
 
   if(start){ 
 
+    // Integral error
     totalError = totalError + error;
 
+    // Constrain total error
+    if(totalError > 500) totalError = 500;
+    if(totalError < -500) totalError = -500;
+ 
     // PID Calculations
     output = Kp*error + Ki*totalError + Kd*(error - prevError);
     output = map(abs(output), 0, 1250, 0, 255);
@@ -120,3 +132,5 @@ void loop()
   delay((timeStep*1000) - (millis() - timer));
 
 }
+
+
