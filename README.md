@@ -15,7 +15,7 @@ The Bill of Materials for this project can be found here: https://docs.google.co
 
 To control the robot, I use a PID controller, with the help of a Kalman filter (defined in KalmanFilter.h) to filter out the noise from the accelerometer and to factor in gyroscope drift. A good artilce on the fundamentals of the Kalman filter can be found here: https://blog.tkjelectronics.dk/2012/09/a-practical-approach-to-kalman-filter-and-how-to-implement-it/
 
-One thing to note for my design was that the height of the IMU board from the base of the robot resulted in greater angular accelerations and thus greater noise from the accelerometer. Therefore, the Measurement Noise variance had to be set to a greater value then the generic value reccomended in the article above. 
+One thing to note for my design was that the position of the IMU board relative to the base of the robot resulted in greater angular accelerations and thus greater noise from the accelerometer. Therefore, the measurement noise variance had to be set to a greater value than the generic value recommended in the article above. 
 
 Here is a video of the robot maintaining balance on youtube: https://www.youtube.com/shorts/AJx97sAAVso
 
