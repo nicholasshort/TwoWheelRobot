@@ -4,7 +4,7 @@ This is a project I started to learn more about control theory.
 
 The project consists of three main folders:
 1) Arduino Code
-2) Hand Derivations for the Linearized State Space model of a Pendulum on a Cart
+2) Hand Derivations for the Linearized State Space Model of a Pendulum on a Cart
 3) Matlab/Python Pendulum on a Cart Simulation Files
 
 I will try to go over each folder in the remainder of this readme.
