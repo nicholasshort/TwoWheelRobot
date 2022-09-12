@@ -33,11 +33,6 @@ Here is the animation without any control:
 Here is the animation of the linearized system with full state feedback:
 ![final_631eb2a96fb6b5005e3506c4_549431](https://user-images.githubusercontent.com/56266904/189573871-6fa7416a-b05d-4d48-8bf4-04387191e27d.gif)
 
-
-Below is an image of the control loop for full state feedback.
-
-![Full State Feedback](https://user-images.githubusercontent.com/56266904/189548020-bbbb1152-c92d-497f-bb80-6247c9aa2ebc.PNG)
-
 Additionally, I also tried to control the system using a PID controller. In "PID_Tuning.m", I implemented a very slow root-locus plot in Matlab to generate proper PID gain values to stabilize the system. An example of the root locus plot can be seen below.
 
 ![Root Locus](https://user-images.githubusercontent.com/56266904/189548647-d0ea9e37-3c35-4ff8-b398-48a559acb3de.PNG)
