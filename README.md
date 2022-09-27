@@ -17,7 +17,9 @@ To control the robot, I use a PID controller, with the help of a Kalman filter (
 
 One thing to note for my design was that the position of the IMU board relative to the base of the robot resulted in greater angular accelerations and thus greater noise from the accelerometer. Therefore, the measurement noise variance had to be set to a greater value than the generic value recommended in the article above. 
 
-Here is a video of the robot maintaining balance on youtube: https://www.youtube.com/shorts/AJx97sAAVso
+Here is a video of the robot maintaining balance on youtube: 
+
+[![Robot](https://user-images.githubusercontent.com/56266904/192440144-565a7b4c-8bcb-4bce-8606-3520d222bb25.PNG)](https://www.youtube.com/shorts/AJx97sAAVso)
 
 # Hand Derivations
 
@@ -40,5 +42,6 @@ Additionally, I also tried to control the system using a PID controller. In "PID
 I then used the PID values found from the locus plot to plot the system's step response (Note these are not optimal PID values)
 
 ![Step Response](https://user-images.githubusercontent.com/56266904/189548765-66a3a7c9-077d-4b21-a014-2f3554d6f8e2.PNG)
+
 
 
