@@ -37,11 +37,11 @@ Here is the animation of the linearized system with full state feedback:
 
 Additionally, I also tried to control the system using a PID controller. In "PID_Tuning.m", I implemented a very slow root-locus plot in Matlab to generate proper PID gain values to stabilize the system. An example of the root locus plot can be seen below.
 
-![Root Locus](https://user-images.githubusercontent.com/56266904/189548647-d0ea9e37-3c35-4ff8-b398-48a559acb3de.PNG)
+![Root Locus](https://user-images.githubusercontent.com/56266904/193131380-6aaf6019-71dd-4641-b3de-32287012b90b.png)
 
 I then used the PID values found from the locus plot to plot the system's step response (Note these are not optimal PID values)
 
-![Step Response](https://user-images.githubusercontent.com/56266904/189548765-66a3a7c9-077d-4b21-a014-2f3554d6f8e2.PNG)
+![Step Response](https://user-images.githubusercontent.com/56266904/193131499-19a54724-9446-4e4c-9113-1089725a0c2e.png)
 
 
 
